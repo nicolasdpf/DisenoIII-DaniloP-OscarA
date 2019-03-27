@@ -57,7 +57,7 @@ class Particula extends Scene{
         this.size = size;
         this.mesh = this.crearParticula();
         this.meshLabel = this.meshLabelName();
-        this.torus = this.crearToro();
+        //this.torus = this.crearToro();
     }
 
     
@@ -71,8 +71,8 @@ class Particula extends Scene{
         sphereMat.emissiveColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
 
         var mesh = new BABYLON.Mesh.CreateSphere(name, this.subdivs, this.size, scene);
-        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: Math.random(), restitution: Math.random()}, scene);
-
+        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: Math.random(), restitution: 0}, scene);
+        mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
         mesh.material = sphereMat;
         mesh.position.y =1;
 
@@ -126,17 +126,55 @@ class Particula extends Scene{
         return new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y,this.mesh.position.z);
         //return console.log(`Position x: ${this.mesh.position.x}, y: ${this.mesh.position.y}, z: ${this.mesh.position.z}`);
     }
+    setCoordinates(i){
+        var cuadrante = Math.floor(Math.random() *(5 - 1)) + 1;
+        if(i % 30 === 0){
+            if(cuadrante === 1){
+                this.moveCuadrante1(true);
+                this.moveCuadrante2(false);
+                this.moveCuadrante3(false);
+                this.moveCuadrante4(false);
+            }else if(cuadrante === 2){
+                this.moveCuadrante2(true);
+                this.moveCuadrante1(false);
+                this.moveCuadrante3(false);
+                this.moveCuadrante4(false);
+            }else if(cuadrante === 3){
+                this.moveCuadrante3(true);
+                this.moveCuadrante1(false);
+                this.moveCuadrante2(false);
+                this.moveCuadrante4(false);
+            }else if(cuadrante === 2){
+                this.moveCuadrante4(true);
+                this.moveCuadrante1(false);
+                this.moveCuadrante2(false);
+                this.moveCuadrante3(false);
+            }
+        }
+    }
 
-
-    moveCuadrante1(bool){
-        var mX, mY, mZ;
-        mX = Math.random();
+    moveCuadrante1(bool = false, mX = getRndInteger(0, 100), mY = 1.2, mZ = getRndInteger(0,100)){
         if(bool){
-            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3());
+            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
+        }
+    }
+    moveCuadrante2(bool = false, mX = getRndInteger(-10, 0), mY = 1.2, mZ = getRndInteger(0,10)){
+        if(bool){
+            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
+        }
+    }
+    moveCuadrante3(bool = false, mX = getRndInteger(-10, 0), mY = 1.2, mZ = getRndInteger(-10,0)){
+        if(bool){
+            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
+        }
+    }
+    moveCuadrante4(bool = false, mX = getRndInteger(0, 10), mY = 1.2, mZ = getRndInteger(-10, 0)){
+        if(bool){
+            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
     }
 }
 function getRndInteger(min, max){
-    return (Math.random()*(max - min + 1)) + 1;
+    return Math.floor(Math.random()*(max - min + 1)) + 1;
 }
 
