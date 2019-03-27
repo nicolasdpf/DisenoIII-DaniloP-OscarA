@@ -8,7 +8,7 @@ class Scene{
     createScene(){
         var gravityVector = new BABYLON.Vector3(0,-9.81, 0);
         var physicsPlugin = new BABYLON.CannonJSPlugin();
-
+        /*
         var camera = new BABYLON.ArcRotateCamera('camera1', 0, 0, 10, new BABYLON.Vector3(0, 0, 0), scene);
         camera.lowerRadiusLimit = 30;
         camera.lowerBetaLimit = 0;
@@ -17,6 +17,15 @@ class Scene{
         camera.upperAlphaLimit = Math.PI*(5/6);
         camera.setPosition(new BABYLON.Vector3(0,0,20));
         camera.attachControl(canvas, false);
+        */
+
+       var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 400, 0), scene);
+                                        
+       // This targets the camera to scene origin
+       camera.setTarget(BABYLON.Vector3.Zero());
+                           
+       // This attaches the camera to the canvas
+       camera.attachControl(canvas, true);
 
         scene.enablePhysics(gravityVector, physicsPlugin);
 
@@ -74,8 +83,8 @@ class Particula extends Scene{
         mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: Math.random(), restitution: 0}, scene);
         mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
         mesh.material = sphereMat;
-        mesh.position.y =1;
-
+        //mesh.position.y =1;
+        mesh.position = new BABYLON.Vector3(getRndInteger(-100, 100), 1, getRndInteger(-100, 100));
         var shadowGenerator = this.generateShadows();
         shadowGenerator.addShadowCaster(mesh);
 
@@ -106,7 +115,7 @@ class Particula extends Scene{
         label.background = "black"
         label.height = "30px";
         label.alpha = 0.5;
-        label.width = "100px";
+        label.width = "50px";
         label.cornerRadius = 20;
         label.thickness = 1;
         label.linkOffsetY = 30;
@@ -120,7 +129,11 @@ class Particula extends Scene{
     }
 
     setPosition(x = 0, y = 0, z = 0){
-        this.mesh.position = new BABYLON.Vector3(x, y, z);
+        //this.mesh.position = new BABYLON.Vector3(x, y, z);
+        this.mesh.position.x = x;
+        this.mesh.position.y = y;
+        this.mesh.position.z = z;
+        
     }
     getPosition(){
         return new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y,this.mesh.position.z);
@@ -128,47 +141,49 @@ class Particula extends Scene{
     }
     setCoordinates(i){
         var cuadrante = Math.floor(Math.random() *(5 - 1)) + 1;
-        if(i % 30 === 0){
+        //var cuadrante = 2;
+        if(i % 10 === 0){
             if(cuadrante === 1){
                 this.moveCuadrante1(true);
-                this.moveCuadrante2(false);
-                this.moveCuadrante3(false);
-                this.moveCuadrante4(false);
+                //this.moveCuadrante2(false);
+                //this.moveCuadrante3(false);
+                //this.moveCuadrante4(false);
             }else if(cuadrante === 2){
                 this.moveCuadrante2(true);
-                this.moveCuadrante1(false);
-                this.moveCuadrante3(false);
-                this.moveCuadrante4(false);
+                //this.moveCuadrante1(false);
+                //this.moveCuadrante3(false);
+                //this.moveCuadrante4(false);
             }else if(cuadrante === 3){
                 this.moveCuadrante3(true);
-                this.moveCuadrante1(false);
-                this.moveCuadrante2(false);
-                this.moveCuadrante4(false);
-            }else if(cuadrante === 2){
+                //this.moveCuadrante1(false);
+                //this.moveCuadrante2(false);
+                //this.moveCuadrante4(false);
+            }else if(cuadrante === 4){
                 this.moveCuadrante4(true);
-                this.moveCuadrante1(false);
-                this.moveCuadrante2(false);
-                this.moveCuadrante3(false);
+                //this.moveCuadrante1(false);
+                //this.moveCuadrante2(false);
+                //this.moveCuadrante3(false);
             }
         }
     }
 
-    moveCuadrante1(bool = false, mX = getRndInteger(0, 100), mY = 1.2, mZ = getRndInteger(0,100)){
+
+    moveCuadrante1(bool = false, mX = getRndInteger(0, 10), mY = 1.2, mZ = getRndInteger(0,10)){
         if(bool){
             this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
     }
-    moveCuadrante2(bool = false, mX = getRndInteger(-10, 0), mY = 1.2, mZ = getRndInteger(0,10)){
+    moveCuadrante2(bool = false, mX = getRndInteger(0, -10), mY = 1.2, mZ = getRndInteger(0,10)){
         if(bool){
             this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
     }
-    moveCuadrante3(bool = false, mX = getRndInteger(-10, 0), mY = 1.2, mZ = getRndInteger(-10,0)){
+    moveCuadrante3(bool = false, mX = getRndInteger(0, -10), mY = 1.2, mZ = getRndInteger(0,-10)){
         if(bool){
             this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
     }
-    moveCuadrante4(bool = false, mX = getRndInteger(0, 10), mY = 1.2, mZ = getRndInteger(-10, 0)){
+    moveCuadrante4(bool = false, mX = getRndInteger(0, 10), mY = 1.2, mZ = getRndInteger(0, -10)){
         if(bool){
             this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
