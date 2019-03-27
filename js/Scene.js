@@ -126,4 +126,17 @@ class Particula extends Scene{
         return new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y,this.mesh.position.z);
         //return console.log(`Position x: ${this.mesh.position.x}, y: ${this.mesh.position.y}, z: ${this.mesh.position.z}`);
     }
+
+
+    moveCuadrante1(bool){
+        var mX, mY, mZ;
+        mX = Math.random();
+        if(bool){
+            this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3());
+        }
+    }
 }
+function getRndInteger(min, max){
+    return (Math.random()*(max - min + 1)) + 1;
+}
+
