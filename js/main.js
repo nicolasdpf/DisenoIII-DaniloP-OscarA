@@ -34,15 +34,6 @@ function generadorDeParticulas(escena){
     }
 }
 
-//Funcion para er la colision de las particulas con un objeto dado (No funciona)
-function PColision(m){
-    let index;
-    for (index = 0; index < sistParticulas.length; index++) {
-            sistParticulas[index].checkColision(m);
-        }
-    }
-
-
 //Variable que hará un conteo general de los espacios creados
 var iGrounds;
 
@@ -56,12 +47,12 @@ window.addEventListener('DOMContentLoaded', function(){
     escena.generateShadows();
     escena.createGround(groundName, groundWidth, groundHeight, divs);
     
-    var ob1 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(30 - 20 + 1) + 1));
-    ob1.setPosition(Math.floor(Math.random()*(100 - 0 + 1)) + 1,1,Math.floor(Math.random()*(100 - 0 + 1)));
-    var ob2 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(30 - 20 + 1) + 1));
-    ob2.setPosition(Math.floor(Math.random()*(100 - 0 + 1)) + 1,1,Math.floor(Math.random()*(100 - 0 + 1)));
-    var ob3 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(30 - 20 + 1) + 1));
-    ob3.setPosition(Math.floor(Math.random()*(100 - 0 + 1)) + 1,1,Math.floor(Math.random()*(100 - 0 + 1)));
+    var ob1 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(40 - (-30) + 1) + 1));
+    ob1.setPosition(Math.floor(Math.random()*(200 - (-200) + 1)) + 1,1,Math.floor(Math.random()*(200 - (-200) + 1)));
+    var ob2 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(40 - (-30) + 1) + 1));
+    ob2.setPosition(Math.floor(Math.random()*(200 - (-200) + 1)) + 1,1,Math.floor(Math.random()*(200 - (-200) + 1)));
+    var ob3 = new Obstaculo(escena.scene,'o1',5,Math.floor(Math.random()*(40 - (-30) + 1) + 1));
+    ob3.setPosition(Math.floor(Math.random()*(200 - (-200) + 1)) + 1,1,Math.floor(Math.random()*(200 - (-200) + 1)));
 
     var particula = new Particula(escena.scene, "PPP", 16, 2);
 
@@ -114,3 +105,4 @@ var showAxis = function(size) {
 
 
 
+//TEST GITHUB
