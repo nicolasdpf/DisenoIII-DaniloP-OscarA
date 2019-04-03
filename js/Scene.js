@@ -255,7 +255,14 @@ class Particula extends Scene {
         }
     }
 
-    
+    //Funcion dentro de la clase Particula que "al detectar la colision" hace algo (cambiar el color por ahora)
+    checkColision(m){
+        if (this.mesh.intersectsMesh(m, true)) {
+            this.mesh.material.emissiveColor = new BABYLON.Color3(1, 0, 0);
+        }
+     
+    }
+
 }
 
 
