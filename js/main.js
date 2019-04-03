@@ -5,7 +5,7 @@ var scene = new BABYLON.Scene(engine);
 
 
 var groundName = 'ground1';
-var groundWidth = 100, groundHeight = 100, divs = 2;
+var groundWidth = 500, groundHeight = 500, divs = 2;
 
 var sistParticulas = new Array();
 var tiempo = 0;
@@ -59,10 +59,10 @@ window.addEventListener('DOMContentLoaded', function(){
     escena.engine.runRenderLoop(function(){
         
         tiempo ++;
-        //generadorDeParticulas(escena);
+        generadorDeParticulas(escena);
         escena.scene.render();
     });
-    //setInterval(generadorDeParticulas(escena), 1000);
+    setInterval(generadorDeParticulas(escena), 1000);
     showAxis(100);
 });
 

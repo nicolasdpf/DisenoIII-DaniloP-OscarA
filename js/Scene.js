@@ -49,7 +49,6 @@ class Scene{
 
         return shadowGenerator;
     }
-
     createGround(name, width, length, divs){
         var ground = new BABYLON.Mesh.CreateGround(name, width, length, divs, scene);
         ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
@@ -59,7 +58,6 @@ class Scene{
         return ground;
     }
 }
-
 
 class Obstaculo extends Scene{
 	constructor(scene, name, subdivs, size, px, py, pz){
@@ -116,7 +114,6 @@ class Particula extends Scene {
         this.mesh = this.crearParticula();
         this.meshLabel = this.meshLabelName();
         this.torus = this.crearToro();
-        this.prepareButton = this.prepareButton();
     }
 
     
@@ -130,31 +127,26 @@ class Particula extends Scene {
         sphereMat.emissiveColor = new BABYLON.Color3(Math.random(), Math.random(), Math.random());
 
         var mesh = new BABYLON.Mesh.CreateSphere(name, this.subdivs, this.size, scene);
-        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: Math.random(), restitution: 0}, scene);
+        mesh.actionManager = new BABYLON.ActionManager(scene);
+        mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: 10, restitution: 0}, scene);
         mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
         mesh.material = sphereMat;
         //mesh.position.y =1;
-        mesh.position = new BABYLON.Vector3(getRndInteger(0, 100), 1, getRndInteger(0, 100));
+        mesh.position = new BABYLON.Vector3(getRndInteger(100, 250), 1, getRndInteger(100, 250));
         var shadowGenerator = this.generateShadows();
         shadowGenerator.addShadowCaster(mesh);
-
+        this.prepareButton(mesh);
         mesh.receiveShadows = true;
-        
         return mesh;
     }
 
-    prepareButton(){
-        this.mesh.actionManager = new BABYLON.ActionManager(scene);
-        this.mesh.actionManager.registerAction(
-            new BABYLON.InterpolateValueAction(
-                BABYLON.ActionManager.OnPickTrigger,
-                light,
-                'diffuse',
-                BABYLON.Color3.Black(),
-                1000
-            )
-        );
+    prepareButton(mesh){
+        mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh.material, "emissiveColor", mesh.material.emissiveColor));
+        mesh.actionManager.registerAction(new BABYLON.SetValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh.material, "emissiveColor", BABYLON.Color3.White()));
+        //mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOutTrigger, mesh, "scaling", new BABYLON.Vector3(1, 1, 1), 150));
+        //mesh.actionManager.registerAction(new BABYLON.InterpolateValueAction(BABYLON.ActionManager.OnPointerOverTrigger, mesh, "scaling", new BABYLON.Vector3(1.3, 1.3, 1.3), 150));
     }
+
 
     crearToro(){
         var torusMat = new BABYLON.StandardMaterial("texture1", scene);
@@ -202,6 +194,17 @@ class Particula extends Scene {
         return new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y,this.mesh.position.z);
         //return console.log(`Position x: ${this.mesh.position.x}, y: ${this.mesh.position.y}, z: ${this.mesh.position.z}`);
     }
+
+    liveTime(){
+        var time = 0;
+        time++;
+        return time;
+    }
+
+
+
+
+
     setCoordinates(i){
         var cuadrante = Math.floor(Math.random() *(5 - 1)) + 1;
         //var cuadrante = 2;
