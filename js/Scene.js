@@ -19,10 +19,11 @@ class Scene{
         camera.attachControl(canvas, false);
         */
 
-       var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(0, 400, 0), scene);
+       var camera = new BABYLON.FreeCamera("camera1", new BABYLON.Vector3(50, 200, 100), scene);
+       
                                         
        // This targets the camera to scene origin
-       camera.setTarget(BABYLON.Vector3.Zero());
+       camera.setTarget(new BABYLON.Vector3(50, 0, 50));
                            
        // This attaches the camera to the canvas
        camera.attachControl(canvas, true);
@@ -53,11 +54,59 @@ class Scene{
         var ground = new BABYLON.Mesh.CreateGround(name, width, length, divs, scene);
         ground.physicsImpostor = new BABYLON.PhysicsImpostor(ground, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0, restitution: 0.9 }, scene);
         ground.receiveShadows = true;
+        ground.position.x = length/2;
+        ground.position.z = width/2;
         return ground;
     }
 }
 
-class Particula extends Scene{
+
+class Obstaculo extends Scene{
+	constructor(scene, name, subdivs, size, px, py, pz){
+        super(scene);
+        this.name = name;
+        this.subdivs = subdivs;
+        this.size = size;
+        this.mesh = this.crearObstaculo();
+        
+    }
+	
+	crearObstaculo(){
+		var obsWireMat = new BABYLON.StandardMaterial("obstaculomat", scene);
+		
+		//Material y Color
+		obsWireMat.diffuseColor = new BABYLON.Color3(0, 0, 0);
+        obsWireMat.specularColor = new BABYLON.Color3(0, 0, 0);
+        obsWireMat.emissiveColor = new BABYLON.Color3(0, 0, 0);
+        obsWireMat.wireframe = true;
+		//Mesh
+		var mesh = new BABYLON.Mesh.CreateSphere(name, this.subdivs, this.size, scene);
+        //mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.SphereImpostor, {mass: Math.random(), restitution: Math.random()}, scene);
+		
+		mesh.material = obsWireMat;
+        //mesh.position.y =1;
+
+        mesh.position = new BABYLON.Vector3(getRndInteger(-500, 500), 1, getRndInteger(-500, 500));
+        var shadowGenerator = this.generateShadows();
+        shadowGenerator.addShadowCaster(mesh);
+
+        mesh.receiveShadows = true;
+        
+        return mesh;
+	}
+	
+	setPosition(x = 0, y = 0, z = 0){
+        this.mesh.position = new BABYLON.Vector3(x, y, z);
+    }
+    getPosition(){
+        return new BABYLON.Vector3(this.mesh.position.x, this.mesh.position.y,this.mesh.position.z);
+        //return console.log(`Position x: ${this.mesh.position.x}, y: ${this.mesh.position.y}, z: ${this.mesh.position.z}`);
+    }
+
+}
+
+
+class Particula extends Scene {
 
     constructor(scene, name, subdivs, size){
         super(scene);
@@ -66,7 +115,8 @@ class Particula extends Scene{
         this.size = size;
         this.mesh = this.crearParticula();
         this.meshLabel = this.meshLabelName();
-        //this.torus = this.crearToro();
+        this.torus = this.crearToro();
+        this.prepareButton = this.prepareButton();
     }
 
     
@@ -84,13 +134,26 @@ class Particula extends Scene{
         mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
         mesh.material = sphereMat;
         //mesh.position.y =1;
-        mesh.position = new BABYLON.Vector3(getRndInteger(-100, 100), 1, getRndInteger(-100, 100));
+        mesh.position = new BABYLON.Vector3(getRndInteger(0, 100), 1, getRndInteger(0, 100));
         var shadowGenerator = this.generateShadows();
         shadowGenerator.addShadowCaster(mesh);
 
         mesh.receiveShadows = true;
         
         return mesh;
+    }
+
+    prepareButton(){
+        this.mesh.actionManager = new BABYLON.ActionManager(scene);
+        this.mesh.actionManager.registerAction(
+            new BABYLON.InterpolateValueAction(
+                BABYLON.ActionManager.OnPickTrigger,
+                light,
+                'diffuse',
+                BABYLON.Color3.Black(),
+                1000
+            )
+        );
     }
 
     crearToro(){
@@ -188,7 +251,14 @@ class Particula extends Scene{
             this.mesh.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(mX, mY, mZ));
         }
     }
+
+    
 }
+
+
+
+
+
 function getRndInteger(min, max){
     return Math.floor(Math.random()*(max - min + 1)) + 1;
 }
